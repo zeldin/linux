@@ -180,7 +180,11 @@ __exception_irq_entry bcm2836_arm_irqchip_handle_irq(struct pt_regs *regs)
 	} else if (stat) {
 		u32 hwirq = ffs(stat) - 1;
 
+#ifndef CONFIG_ARM64
 		handle_IRQ(irq_linear_revmap(intc.domain, hwirq), regs);
+#else
+		__handle_domain_irq(NULL, irq_linear_revmap(intc.domain, hwirq), false, regs);
+#endif
 	}
 }
 
@@ -195,7 +199,11 @@ static void bcm2836_arm_irqchip_send_ipi(const struct cpumask *mask,
 	 * Ensure that stores to normal memory are visible to the
 	 * other CPUs before issuing the IPI.
 	 */
+#ifdef CONFIG_ARM64
+	dsb(ishst);
+#else
 	dsb();
+#endif
 
 	for_each_cpu(cpu, mask)	{
 		writel(1 << ipi, mailbox0_base + 16 * cpu);
@@ -223,6 +231,7 @@ static struct notifier_block bcm2836_arm_irqchip_cpu_notifier = {
 	.priority = 100,
 };
 
+#ifndef CONFIG_ARM64
 int __init bcm2836_smp_boot_secondary(unsigned int cpu,
 				      struct task_struct *idle)
 {
@@ -239,6 +248,7 @@ int __init bcm2836_smp_boot_secondary(unsigned int cpu,
 static const struct smp_operations bcm2836_smp_ops __initconst = {
 	.smp_boot_secondary	= bcm2836_smp_boot_secondary,
 };
+#endif
 
 #endif
 
@@ -253,11 +263,13 @@ bcm2836_arm_irqchip_smp_init(void)
 	/* Unmask IPIs to the boot CPU. */
 	bcm2836_arm_irqchip_cpu_notify(&bcm2836_arm_irqchip_cpu_notifier,
 				       CPU_STARTING,
-				       (void *)smp_processor_id());
+				       (void *)(ptrdiff_t)smp_processor_id());
 	register_cpu_notifier(&bcm2836_arm_irqchip_cpu_notifier);
 
 	set_smp_cross_call(bcm2836_arm_irqchip_send_ipi);
+#ifndef CONFIG_ARM64
 	smp_set_ops(&bcm2836_smp_ops);
+#endif
 #endif
 }
 

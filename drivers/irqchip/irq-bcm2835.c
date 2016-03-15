@@ -52,7 +52,9 @@
 #include <linux/irqdomain.h>
 
 #include <asm/exception.h>
+#ifndef CONFIG_ARM64
 #include <asm/mach/irq.h>
+#endif
 
 /* Put the bank and irq (32 bits) into the hwirq */
 #define MAKE_HWIRQ(b, n)	((b << 5) | (n))
@@ -242,7 +244,11 @@ static void __exception_irq_entry bcm2835_handle_irq(
 	u32 hwirq;
 
 	while ((hwirq = get_next_armctrl_hwirq()) != ~0)
+#ifndef CONFIG_ARM64
 		handle_IRQ(irq_linear_revmap(intc.domain, hwirq), regs);
+#else
+		__handle_domain_irq(NULL, irq_linear_revmap(intc.domain, hwirq), false, regs);
+#endif
 }
 
 static void bcm2836_chained_handle_irq(struct irq_desc *desc)
