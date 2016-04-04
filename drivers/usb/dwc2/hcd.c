@@ -870,8 +870,7 @@ static int dwc2_assign_and_init_hc(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
 		chan->xfer_dma = urb->dma + urb->actual_length;
 
 		/* For non-dword aligned case */
-		if (hsotg->core_params->dma_desc_enable <= 0 &&
-		    (chan->xfer_dma & 0x3))
+		if (chan->xfer_dma & 0x3)
 			bufptr = (u8 *)urb->buf + urb->actual_length;
 	} else {
 		chan->xfer_buf = (u8 *)urb->buf + urb->actual_length;
