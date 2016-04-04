@@ -208,8 +208,10 @@ static dma_addr_t __swiotlb_map_page(struct device *dev, struct page *page,
 
 	dev_addr = swiotlb_map_page(dev, page, offset, size, dir, attrs);
 	if (!is_device_dma_coherent(dev))
+	{
+		//  dev_err(dev, "Mapping non coherent DMA %08lx\n", dev_addr );
 		__dma_map_area(phys_to_virt(dma_to_phys(dev, dev_addr)), size, dir);
-
+	}
 	return dev_addr;
 }
 
