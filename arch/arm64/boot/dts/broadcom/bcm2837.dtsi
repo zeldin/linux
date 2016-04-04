@@ -46,6 +46,7 @@
 		always-on;
 	};
 
+
 	cpus: cpus {
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -62,6 +63,8 @@
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x1>;
 			clock-frequency = <1200000000>;
+			enable-method = "spin-table";
+			cpu-release-addr = <0x0 0x000000e0>;
 		};
 
 		v8_cpu2: cpu@2 {
@@ -69,6 +72,8 @@
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x2>;
 			clock-frequency = <1200000000>;
+                        enable-method = "spin-table";
+			cpu-release-addr = <0x0 0x000000e8>;
 		};
 
 		v8_cpu3: cpu@3 {
@@ -76,6 +81,8 @@
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x3>;
 			clock-frequency = <1200000000>;
+                        enable-method = "spin-table";
+			cpu-release-addr = <0x0 0x000000f0>;
 		};
 	};
 };

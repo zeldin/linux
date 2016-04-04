@@ -457,7 +457,7 @@ CONFIG_ARM64_PAN=y
 # Boot options
 #
 CONFIG_CMDLINE="earlyprintk console=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfs=ext4 rootwait"
-CONFIG_CMDLINE_FORCE=y
+# CONFIG_CMDLINE_FORCE is not set
 # CONFIG_EFI is not set
 
 #
