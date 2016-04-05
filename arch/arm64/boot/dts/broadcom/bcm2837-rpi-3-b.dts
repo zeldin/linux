@@ -52,3 +52,18 @@
         bus-width = <4>;
         status = "okay";
 };
+
+&v8_cpu1 {
+	enable-method = "spin-table";
+	cpu-release-addr = <0 0x000000e0>;
+};
+
+&v8_cpu2 {
+	enable-method = "spin-table";
+	cpu-release-addr = <0 0x000000e8>;
+};
+
+&v8_cpu3 {
+	enable-method = "spin-table";
+	cpu-release-addr = <0 0x000000f0>;
+};
