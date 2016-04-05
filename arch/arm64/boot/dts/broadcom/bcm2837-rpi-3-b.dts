@@ -5,6 +5,10 @@
 	compatible = "raspberrypi,3-model-b", "brcm,bcm2837";
 	model = "Raspberry Pi 3 Model B";
 
+	chosen {
+		bootargs = "earlyprintk console=ttyS0 8250.nr_uarts=1";
+	};
+
 	memory {
 		reg = <0 0x40000000>;
 	};
@@ -20,6 +24,17 @@
 			default-state = "keep";
 			linux,default-trigger = "default-on";
 		};
+	};
+
+	soc {
+                uart1: uart@7e215040 {
+                        compatible = "brcm,bcm2835-aux-uart", "ns16550";
+                        reg = <0x7e215040 0x40>;
+                        interrupts = <1 29>;
+                        clock-frequency = <500000000>;
+                        reg-shift = <2>;
+                        no-loopback-test;
+                };
 	};
 };
 
