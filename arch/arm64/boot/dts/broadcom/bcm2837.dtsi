@@ -21,6 +21,18 @@
 			interrupt-parent = <&local_intc>;
 			interrupts = <9>;
 		};
+
+		firmware: firmware {
+			compatible = "raspberrypi,bcm2835-firmware";
+			mboxes = <&mailbox>;
+		};
+
+		fb: fb {
+			compatible = "brcm,bcm2708-fb";
+			firmware = <&firmware>;
+			status = "okay";
+		};
+
 	};
 
 	timer {

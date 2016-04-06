@@ -1,4 +1,7 @@
 /dts-v1/;
+
+/memreserve/ 0x00000000 0x00001000;
+
 #include "bcm2837.dtsi"
 
 / {
